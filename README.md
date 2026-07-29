@@ -283,6 +283,26 @@ GPT models for higher-quality generation.
 
 ---
 
+##  How to Run
+
+1. Clone the repo and open it in VS Code
+2. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   pip install flask python-dotenv
+   ```
+3. Download the merged vector database from Kaggle and unzip it into a folder named `vectordb/` at the project root
+4. Add your OpenAI API key to a `.env` file at the project root:
+   ```
+   OPENAI_API_KEY=your-key-here
+   ```
+5. Make sure `full_final_poems.csv` is at the project root
+6. Run the app:
+   ```
+   python app.py
+   ```
+7. Open your browser at `http://127.0.0.1:5000`
+
 
 ---
 
