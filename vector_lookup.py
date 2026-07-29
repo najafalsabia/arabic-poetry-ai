@@ -1,33 +1,7 @@
 """
-vector_lookup.py — Task 2 helper: fast poem lookup using the shared ChromaDB
-vector database (built by your team for Task 1/3).
-
-CONFIRMED FROM build_db.ipynb (your teammate's actual notebook):
-- Embedding model: BAAI/bge-m3 via sentence-transformers (1024-dim)
-- Embeddings were computed manually with model.encode() and passed straight
-  to collection.add(embeddings=...) — the collection has NO embedding_function
-  attached. That means queries must ALSO manually encode with the same model
-  and call collection.query(query_embeddings=[...]), not query_texts=[...].
-  (This is exactly why the first attempt failed with "expecting 1024, got 384"
-  — Chroma silently used its own default embedder for query_texts.)
-- metadata keys stored: "poet", "title", "era", "theme", "source"
-  (note: "poet", NOT "poet_name" — and there is NO "full_text" key at all)
-- ids are formatted as "{poem_id}_{chunk_index}" — poems longer than 40
-  verses get split into overlapping chunks, so one poem can have several ids.
-- ⚠️ the indexing loop in the notebook ran on df_test = df.sample(1000,
-  random_state=42) — a 1000-POEM TEST SAMPLE, not the full ~128k dataset.
-  Confirm with her whether she re-ran it on the full CSV before the final
-  submission. If not, most fragments simply won't be in there yet, and
-  find_original_poem() in rewrite_poem.py will silently fall back to the
-  text-match search over the CSV — so you won't be blocked, just slower.
-
-WHY WE STILL GO BACK TO THE CSV FOR THE FULL TEXT
---------------------------------------------------
-Long poems are chunked, so a single vector match might only be ONE piece
-of a longer poem, not the whole thing. Instead of parsing partial text out
-of the document string, we use the vector match purely to find WHICH
-poem_id the fragment belongs to (parsed from the id "{poem_id}_{i}"), then
-fetch the guaranteed-complete full_text for that poem_id from the CSV.
+vector_lookup.py — finds which full poem a short user-typed fragment
+belongs to, using the shared ChromaDB vector database (BAAI/bge-m3),
+then fetches the complete poem text from the CSV by poem_id.
 """
 
 import chromadb
