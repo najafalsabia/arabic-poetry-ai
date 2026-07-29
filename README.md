@@ -199,6 +199,18 @@ LLM
 
 Rewritten Poem
 
+### Example Input
+
+```
+
+```
+
+### Example Output
+
+```
+...
+```
+
 This task demonstrates style transfer using Retrieval-Augmented Generation.
 
 ---
