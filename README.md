@@ -203,7 +203,7 @@ This task demonstrates style transfer using Retrieval-Augmented Generation.
 
 ---
 
-# Dataset
+# Dataset ( [Arabic Poetry Dataset](https://huggingface.co/datasets/Fatimah8Moheeb/Arabic-Poetry-Dataset/blob/main/full_final_poems.csv) )
 
 The project uses a dataset containing  **128,499 classical Arabic poems**.
 
