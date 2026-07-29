@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ذخيرة الشعر — بحث وتوليد شعري بالذكاء الاصطناعي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="page">
+
+  <header class="site-header">
+    <div class="ornament ornament-top"></div>
+    <h1 class="site-title">ذخيرة الشِّعر</h1>
+    <p class="site-subtitle">بحث في دواوين العرب، وإحياء لأساليبهم، ونسج على منوالهم</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="search" role="tab" aria-selected="true">البحث الدلالي</button>
+    <button class="tab-btn" data-tab="rewrite" role="tab" aria-selected="false">إعادة الصياغة</button>
+    <button class="tab-btn" data-tab="generate" role="tab" aria-selected="false">توليد على منوال شاعر</button>
+  </nav>
+
+  <main class="panels">
+
+    <!-- SEARCH PANEL -->
+    <section class="panel active" id="panel-search" role="tabpanel">
+      <p class="panel-intro">اكتب كلمة أو معنى تبحث عنه، وستُعرض عليك القصائد الأقرب في المعنى من ديوان العرب.</p>
+      <form class="tool-form" id="search-form">
+        <input type="text" id="search-query" placeholder="مثال: الشجاعة، الحب، الليل..." autocomplete="off" required>
+        <button type="submit" class="btn-primary">ابحث</button>
+      </form>
+      <div class="results" id="search-results"></div>
+    </section>
+
+    <!-- REWRITE PANEL -->
+    <section class="panel" id="panel-rewrite" role="tabpanel">
+      <p class="panel-intro">اذكر مقطعاً تتذكره من قصيدة معروفة، ثم اكتب بيتاً أول جديداً بنفس الوزن، وسنكمل لك القصيدة على نفس النهج.</p>
+      <form class="tool-form stacked" id="rewrite-form">
+        <label for="rewrite-fragment">مقطع من القصيدة الأصلية</label>
+        <input type="text" id="rewrite-fragment" placeholder="مثال: قفا نبك من ذكرى حبيب" autocomplete="off" required>
+
+        <label for="rewrite-verse">البيت الأول المعدَّل</label>
+        <input type="text" id="rewrite-verse" placeholder="اكتب البيت الأول الجديد بنفس الوزن" autocomplete="off" required>
+
+        <button type="submit" class="btn-primary">أعد الصياغة</button>
+      </form>
+      <div class="results" id="rewrite-results"></div>
+    </section>
+
+    <!-- GENERATE PANEL -->
+    <section class="panel" id="panel-generate" role="tabpanel">
+      <p class="panel-intro">اختر شاعراً وثيمة ومعنى، وسنؤلف لك قصيدة جديدة تحاكي أسلوبه.</p>
+      <form class="tool-form stacked" id="generate-form">
+        <label for="gen-poet">الشاعر</label>
+        <input type="text" id="gen-poet" placeholder="مثال: المتنبي" autocomplete="off" required>
+
+        <label for="gen-theme">الثيم</label>
+        <input type="text" id="gen-theme" placeholder="مثال: حكمة، غزل، هجاء، مدح" autocomplete="off" required>
+
+        <label for="gen-topic">الموضوع</label>
+        <input type="text" id="gen-topic" placeholder="مثال: الصبر" autocomplete="off" required>
+
+        <button type="submit" class="btn-primary">ألِّف القصيدة</button>
+      </form>
+      <div class="results" id="generate-results"></div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="ornament ornament-bottom"></div>
+    <p>مشروع البحث والتوليد الشعري — يعتمد على قاعدة بيانات شعرية ونماذج لغوية</p>
+  </footer>
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
