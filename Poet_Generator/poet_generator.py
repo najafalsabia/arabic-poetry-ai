@@ -22,6 +22,7 @@ VECTOR_DB_PATH = os.path.join(BASE_DIR, "..", "vectordb")
 COLLECTION_NAME = "arabic_poetry"
 EMBEDDING_MODEL_NAME = "BAAI/bge-m3"
 GENERATION_MODEL = "gpt-4.1-mini"
+API_TIMEOUT_SECONDS = 30
 
 _client = None
 _collection = None
@@ -51,17 +52,21 @@ def _get_openai_client():
     return _openai_client
 
 
+def _clean_theme(theme: str) -> str:
+    # accept either "وطنية" or "قصائد وطنية" without doubling the prefix
+    clean = theme.strip()
+    if clean.startswith("قصائد"):
+        clean = clean.replace("قصائد", "", 1).strip()
+    return clean
+
+
 def _build_style_examples(poet: str, theme: str, top_k: int = 3, max_verses: int = 12) -> str:
     """Retrieves top_k real poems by this poet+theme, keeps the first
     max_verses lines of each, and formats them as labeled examples."""
     collection = _get_collection()
     model = _get_model()
 
-    # accept either "وطنية" or "قصائد وطنية" without doubling the prefix
-    clean_theme = theme.strip()
-    if clean_theme.startswith("قصائد"):
-        clean_theme = clean_theme.replace("قصائد", "", 1).strip()
-
+    clean_theme = _clean_theme(theme)
     theme_filter = f"قصائد {clean_theme}"
     query = f"قصائد {poet} في {clean_theme}"
     query_embedding = model.encode(query).tolist()
@@ -88,9 +93,7 @@ def _build_style_examples(poet: str, theme: str, top_k: int = 3, max_verses: int
 
 
 def _build_generation_prompt(poet: str, theme: str, topic: str, examples: str) -> str:
-    clean_theme = theme.strip()
-    if clean_theme.startswith("قصائد"):
-        clean_theme = clean_theme.replace("قصائد", "", 1).strip()
+    clean_theme = _clean_theme(theme)
     theme_filter = f"قصائد {clean_theme}"
     return f"""
 You are an expert Arabic poet.
@@ -140,37 +143,45 @@ def generate_poem(poet: str, theme: str, topic: str, temperature: float = 0.9) -
         temperature: creativity level for generation
 
     Returns:
-        dict with: poem_text, examples_used, poet, theme, topic
+        dict with: poem_text, examples_used, poet, theme, topic, error
     """
-    examples = _build_style_examples(poet, theme)
-
-    if not examples.strip():
-        return {
-            "poem_text": None,
-            "examples_used": 0,
-            "poet": poet,
-            "theme": theme,
-            "topic": topic,
-            "error": "لم يتم العثور على قصائد لهذا الشاعر وهذا الثيم في قاعدة البيانات."
-        }
-
-    prompt = _build_generation_prompt(poet, theme, topic, examples)
-    client = _get_openai_client()
-
-    response = client.chat.completions.create(
-        model=GENERATION_MODEL,
-        messages=[{"role": "user", "content": prompt}],
-        temperature=temperature
-    )
-
-    return {
-        "poem_text": response.choices[0].message.content.strip(),
-        "examples_used": examples.count("Example"),
+    base_result = {
+        "poem_text": None,
+        "examples_used": 0,
         "poet": poet,
         "theme": theme,
         "topic": topic,
         "error": None
     }
+
+    try:
+        examples = _build_style_examples(poet, theme)
+    except Exception as e:
+        base_result["error"] = f"حدث خطأ أثناء البحث في قاعدة البيانات: {str(e)}"
+        return base_result
+
+    if not examples.strip():
+        base_result["error"] = "لم يتم العثور على قصائد لهذا الشاعر وهذا الثيم في قاعدة البيانات."
+        return base_result
+
+    prompt = _build_generation_prompt(poet, theme, topic, examples)
+
+    try:
+        client = _get_openai_client()
+        response = client.chat.completions.create(
+            model=GENERATION_MODEL,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=temperature,
+            timeout=API_TIMEOUT_SECONDS
+        )
+        base_result["poem_text"] = response.choices[0].message.content.strip()
+        base_result["examples_used"] = examples.count("Example")
+        return base_result
+
+    except Exception as e:
+        base_result["examples_used"] = examples.count("Example")
+        base_result["error"] = f"حدث خطأ أثناء التوليد: {str(e)}"
+        return base_result
 
 
 if __name__ == "__main__":
