@@ -276,6 +276,6 @@ GPT models for higher-quality generation.
 
 # Authors
 
-**Najaf Alsabia**
-**Nabaa Alaswad**
-**Fatimah Alwarsh**
+- Najaf Alsabia
+- Nabaa Alaswad
+- Fatimah Alwarsh
