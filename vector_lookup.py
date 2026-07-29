@@ -3,12 +3,14 @@ vector_lookup.py — finds which full poem a short user-typed fragment
 belongs to, using the shared ChromaDB vector database (BAAI/bge-m3),
 then fetches the complete poem text from the CSV by poem_id.
 """
-
+import os
 import chromadb
 from sentence_transformers import SentenceTransformer
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+VECTOR_DB_PATH = os.path.join(BASE_DIR, "..", "vectordb")
+
 # ---- confirmed from build_db.ipynb ----
-VECTOR_DB_PATH = "."
 COLLECTION_NAME = "arabic_poetry"
 EMBEDDING_MODEL_NAME = "BAAI/bge-m3"
 DISTANCE_THRESHOLD = 0.35   # starting point — tune once you can test known vs. unknown fragments
