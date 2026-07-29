@@ -28,6 +28,9 @@ import difflib
 import pandas as pd
 from openai import OpenAI
 from prompts import build_rewrite_prompt
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def normalize_arabic(text: str) -> str:
