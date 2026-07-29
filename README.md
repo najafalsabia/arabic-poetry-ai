@@ -189,14 +189,6 @@ The project uses
 ```
 BAAI/bge-m3
 ```
-
-because it
-
-- supports multilingual text
-- performs well on Arabic
-- produces high-quality semantic embeddings
-- works efficiently for retrieval tasks
-
 ---
 
 # Vector Database ([Chroma Database](https://www.kaggle.com/datasets/nabaanabeeh/arabic-poetry-chroma?select=chroma.sqlite3))
@@ -206,9 +198,6 @@ The project uses **ChromaDB** to store
 - embeddings
 - poem text
 - metadata
-
-This enables efficient semantic search with metadata filtering.
-
 ---
 
 # Large Language Models
