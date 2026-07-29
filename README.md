@@ -47,26 +47,6 @@ ChromaDB Vector Database
 
 Semantic Retrieval
 
-### Features
-
-- Semantic similarity search
-- Fast retrieval using ChromaDB
-- Metadata filtering
-- Supports Arabic text
-- Retrieves top-k most relevant poems
-
-### Metadata Stored
-
-Each poem stores:
-
-- Title
-- Poet
-- Era
-- Theme
-- Source URL
-
-which enables filtering during retrieval.
-
 
 ---
 
