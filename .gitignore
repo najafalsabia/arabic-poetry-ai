@@ -1,0 +1,17 @@
+# Large data files — too big for GitHub, kept local only
+full_final_poems.csv
+chroma.sqlite3
+vectordb/
+*.sqlite3
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Environment / secrets
+.env
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
