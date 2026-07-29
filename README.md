@@ -208,7 +208,7 @@ Rewritten Poem
 ### Example Output
 
 ```
-...
+
 ```
 
 This task demonstrates style transfer using Retrieval-Augmented Generation.
